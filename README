@@ -16,6 +16,6 @@ from classifier import *
 classifier = PartisanTweetClassifier()
 classifier.fetch_twitter()
 # Some output...
-classifier.train()
+classifier.train_model()
 classifier.accuracy()
 classifier.salient_features()
