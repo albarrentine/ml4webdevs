@@ -41,12 +41,6 @@ echo "Step 3: Making things relocatable...why not"
 echo "><><><><><><><><><><><><><><><><><><><><><><"
 virtualenv ../$OUTPUT_DIR --relocatable
 
-echo "><><><><><><><><><><><><><><><><><><><><><"
-echo "Step 4: Making tmp and log directories..."
-echo "><><><><><><><><><><><><><><><><><><><><><"
-mkdir ../$OUTPUT_DIR/log
-mkdir ../$OUTPUT_DIR/tmp
-
 echo "
  _______                                          _       _ 
 (_______)                                  _     (_)  _  | |
