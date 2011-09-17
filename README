@@ -1,0 +1,21 @@
+To get started:
+
+(Mac OSX) sudo brew install libyaml
+(Ubuntu) sudo apt-get install libyaml libyaml-dev
+
+cd setup
+./bootstrap.sh
+
+You should see "Come get it" at the end
+
+source env/bin/activate
+
+Open a python shell and hack away:
+
+from classifier import *
+classifier = PartisanTweetClassifier()
+classifier.fetch_twitter()
+# Some output...
+classifier.train()
+classifier.accuracy()
+classifier.salient_features()
