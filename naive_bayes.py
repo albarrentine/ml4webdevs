@@ -92,7 +92,7 @@ if __name__ == '__main__':
     
     class MyClassifier(NaiveBayesClassifier):
         @classmethod
-        def features(cls, inst):
+        def features(cls, inst, label=None):
             return dict((word, True) for word in inst.split())
     
     model = MyClassifier()
