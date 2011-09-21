@@ -74,4 +74,14 @@ class PartisanTweetClassifier(NaiveBayesClassifier):
             middle = len(res)/2
             self.training_sets[party] = res[:middle]
             self.test_sets[party] = res[middle+1:]
-            
+           
+if __name__ == '__main__':
+    from itertools import chain
+    import time
+    c = PartisanTweetClassifier()
+    print 'Fetching Twitter data...'
+    c.fetch_twitter()
+    print 'Training model'
+    c.train(chain(*c.training_sets.values()))
+    c.salient_features(pprint=True)
+    print 'Accuracy: %s' % c.accuracy(chain(*c.test_sets.values()))
