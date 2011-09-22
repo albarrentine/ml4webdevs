@@ -5,8 +5,7 @@ class NaiveBayesClassifier(object):
     def __init__(self):
         self.label_totals = defaultdict(int)
         self.feature_totals = defaultdict(lambda: defaultdict(int))
-        self.num_training_instances = 0
-    
+        
     @classmethod
     def features(cls, instance, label=None):
         raise NotImplementedError('Children must implement their own')
@@ -50,7 +49,6 @@ class NaiveBayesClassifier(object):
         """Since we're only storing counts, this can be updated iteratively"""
         for inst, label in data:
             self.label_totals[label] += 1
-            self.num_training_instances += 1
             
             features = self.features(inst, label)
             for feature, value in features.iteritems():
@@ -66,26 +64,7 @@ class NaiveBayesClassifier(object):
             total += 1
         
         return float(correct) / total
-        
-    def salient_features(self, n=100, pprint=False):
-        ratios = {}
-        labels = self.label_totals.keys()
-        
-        for feature, prob_dict in self.feature_totals.iteritems():
-            probs = [self.expected_likelihood_estimate(feature, label) for label in labels]
-            min_prob = min(enumerate(probs), key=itemgetter(1))
-            max_prob = max(enumerate(probs), key=itemgetter(1))
-            ratios[feature] = (labels[max_prob[0]], int(round(max_prob[1] / min_prob[1])) )
-
-        probs = sorted(ratios.iteritems(), key=lambda item: item[1][1], reverse=True)[:n]
-        
-        if pprint:
-            print 'Most salient features:'
-            for feature, (label, ratio) in probs:
-                print ('%24s %6s = %s : 1.0') % (feature, label, ratio)
-        else:
-            return probs
-         
+                 
 if __name__ == '__main__':
     data = [('I hate Obama, taxes are bad for America', 'GOP'),
         ('Americans love @BarackObama', 'DEM')]

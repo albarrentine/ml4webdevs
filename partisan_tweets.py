@@ -2,7 +2,8 @@
 
 import tweepy
 import nltk
-import yaml
+import os
+from operator import itemgetter
 from itertools import chain
 from naive_bayes import NaiveBayesClassifier
 from functools import partial
@@ -24,18 +25,11 @@ api = tweepy.API()
 stopwords = set([word.rstrip() for word in open('stopwords.txt')]) | set(['.',',',';','"',"'",'?','(',')',':','-','_','`','...'])
 porter = PorterStemmer()
 
-# Regex pattern for splitting tokens
-tokenizer = r'''(?x)
-      ([A-Z]\.)+
-    | \w+(-\w+)*
-    | \$?\d+(\.\d+)?%?
-    | \.\.\.
-    | [][.,;"'?():-_`]
-'''
 
 class PartisanTweetClassifier(NaiveBayesClassifier):
-    def __init__(self, *args, **kw):
-        super(PartisanTweetClassifier, self).__init__(*args, **kw)
+    def __init__(self, filename='twitter_model.out', **kw):
+        super(PartisanTweetClassifier, self).__init__(**kw)
+        self.filename = filename
         self.training_sets = {}
         self.test_sets = {}
     
@@ -45,8 +39,10 @@ class PartisanTweetClassifier(NaiveBayesClassifier):
         
         text = tweet if isinstance(tweet, basestring) else tweet.text
         
-        words = [porter.stem(word.lower()) for word in nltk.regexp_tokenize(text, tokenizer)
-                 if word.lower() != hashtags.get(label) and word not in stopwords]
+        hashtag = hashtags.get(label)
+        
+        words = [porter.stem(word.lower()) if not word.startswith('#') or word.startswith('@') else word for word in text.split()
+                 if word.lower() != hashtag and word not in stopwords]
         
         f = dict((word, True) for word in words)
         f.update(dict((' '.join(word), True) for word in nltk.bigrams(words)))
@@ -74,6 +70,25 @@ class PartisanTweetClassifier(NaiveBayesClassifier):
             middle = len(res)/2
             self.training_sets[party] = res[:middle]
             self.test_sets[party] = res[middle+1:]
+            
+    def salient_features(self, n=100, pprint=False):
+        ratios = {}
+        labels = self.label_totals.keys()
+        
+        for feature, prob_dict in self.feature_totals.iteritems():
+            probs = [self.expected_likelihood_estimate(feature, label) for label in labels]
+            min_prob = min(enumerate(probs), key=itemgetter(1))
+            max_prob = max(enumerate(probs), key=itemgetter(1))
+            ratios[feature] = (labels[max_prob[0]], int(round(max_prob[1] / min_prob[1])) )
+
+        probs = sorted(ratios.iteritems(), key=lambda item: item[1][1], reverse=True)[:n]
+        
+        if pprint:
+            print 'Most salient features:'
+            for feature, (label, ratio) in probs:
+                print ('%24s %6s = %s : 1.0') % (feature, label, ratio)
+        else:
+            return probs
            
 if __name__ == '__main__':
     from itertools import chain
