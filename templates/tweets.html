@@ -1,0 +1,8 @@
+<h3>Results</h3>
+<strong>Classifier accuracy:</strong> <em>{{ '{:.4%}'.format(accuracy) }}</em><br />
+<strong>Most salient features:</strong><br /><br />
+<table>
+    {% for feature, (label, ratio) in salient %}
+    <tr><td>{{ feature }}</td> <td style="width:100px; text-align:center; color:{% if label=='GOP' %}red{% else %}blue{% endif %}"> {{ label }}</td> <td>{{ ratio }} : 1</td></tr>
+    {% endfor %}
+</table>

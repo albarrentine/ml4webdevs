@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block heading %}<h1>Partisan tweet classifier</h1>{% endblock %}
+
+{% block content %}
+<p>Using the top political hashtags on Twitter:<br /><br />
+<a href="http://twitter.com/#!/search/%23p2">#p2</a> (Progressives 2.0) and <br />
+<a href="http://twitter.com/#!/search/%23tcot">#tcot</a> (Top Conservatives on Twitter)<br /><br />
+we will attempt to build a model which classifies new tweets as either progressive (DEM) or conservtive (GOP).</p>
+
+<script>
+    jQuery(document).ready(function () {
+        jQuery('#tweets').html(' Loading you some tweets... <img src="{{ url_for('static', filename='ajax_loader.gif') }}" />');
+        jQuery.post('{{ url_for('post_partisan_tweets') }}', function(response) {
+            jQuery('#tweets').html(response.result);
+        });
+    });
+</script>
+
+<div id="tweets">
+</div>
+
+{% endblock %}

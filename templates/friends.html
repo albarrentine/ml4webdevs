@@ -1,0 +1,20 @@
+{% macro fb_link(obj) %}
+    <a href="http://facebook.com/{{ obj['id'] }}" target="_blank">
+        <img src="{{ obj['picture'] }}" align="middle" /></a>
+    <a class="fb_name" href="http://facebook.com/{{ obj['id'] }}" target="_blank">
+        {{ obj['name'] }}</a>
+{%- endmacro %}
+
+<div id="me">
+<h3>You are here</h3>
+<p>{{ fb_link(me) }}</p>
+</div>
+
+<div id="similar">
+<h3>Similar friends</h3>
+<ul>
+    {% for friend in friends %}
+        <li>{{ fb_link(friend) }} <strong>(sim={{ friend['sim'] }})</strong></li>
+    {% endfor %}
+</ul>
+</div>

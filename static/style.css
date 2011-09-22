@@ -1,0 +1,17 @@
+ul {
+    list-style: none;
+}
+
+
+
+#classifier_results li {
+    margin-left: 0;
+}
+
+#home_list li {
+    margin-top: 1em;
+}
+
+#similar li {
+    margin-top: 5px;
+}

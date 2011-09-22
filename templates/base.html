@@ -1,0 +1,15 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+    <head>
+        <title>Machine Learning for Web Developers</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="content">
+        {% block heading %}<h1>Machine Learning for Web Developers</h1>{% endblock %}
+        {% block content %}{% endblock %}
+        </div>
+    </body>
+    
+</html>

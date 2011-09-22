@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block heading %}<h1>Most similar Facebook friends</h1>{% endblock %}
+
+{% block content %}
+<p>Find the Jaccard coefficient between your Facebook friends' interests and your own.</p>
+<div id="friends">
+</div>
+
+<div id="fb-root"></div>
+    <script>
+        function doPost() {
+            jQuery('#friends').html('Loading your friends... <img src="{{ url_for('static', filename='ajax_loader.gif') }}" />');
+            jQuery.post('{{ url_for('post_friend_similarity') }}', function(data) {
+                jQuery('#friends').html(data.result);
+            });
+        }
+        
+        function fbLoginStatus(response) {
+            if (response.session && response.session!=null) {
+                jQuery('#fb_login_button').hide('fast');
+                doPost();
+            } else {
+                jQuery('#fb_login_button').show('fast');
+            }
+        }
+        
+        window.fbAsyncInit = function() {
+            FB.init({ 
+               appId:'207747259291281', cookie:true, 
+               status:true, xfbml:true 
+            });
+            jQuery('#fb_login_button').click(function(response) {
+                FB.login(fbLoginStatus, {'scope': 'user_interests, friends_interests'}); 
+            });
+            FB.getLoginStatus(fbLoginStatus);
+            FB.Event.subscribe('auth.statusChange', fbLoginStatus);
+        };
+        
+        (function() {
+            var e = document.createElement('script');
+            e.src = document.location.protocol + '//connect.facebook.net/en_US/all.js';
+            e.async = true;
+            document.getElementById('fb-root').appendChild(e);
+        }());
+        
+      </script>
+      <div id="fb_login_button">
+        <img src="{{ url_for('static', filename='facebook_connect_button.gif') }}"/>
+      </div>
+
+
+{% endblock %}

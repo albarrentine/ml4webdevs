@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+O hai! I can haz learning algorithm?
+<br/>
+<ul id="home_list">
+    <li><a href="{{ url_for('partisan_tweets') }} ">Partisan Tweet Classifier (Naive Bayes)</a></li>
+    <li><a href="{{ url_for('friend_similarity') }}">Friend Similarity (Jaccard)</a></li>
+</ul>
+{% endblock %}
