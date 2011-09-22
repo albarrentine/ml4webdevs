@@ -41,7 +41,7 @@ class PartisanTweetClassifier(NaiveBayesClassifier):
         
         hashtag = hashtags.get(label)
         
-        words = [porter.stem(word.lower()) if not word.startswith('#') or word.startswith('@') else word for word in text.split()
+        words = [porter.stem(word.lower()) if not word.startswith('#') or word.startswith('@') else word.lower() for word in text.split()
                  if word.lower() != hashtag and word not in stopwords]
         
         f = dict((word, True) for word in words)
