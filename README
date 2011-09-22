@@ -11,3 +11,9 @@ You should see "Come get it" at the end
 source env/bin/activate
 
 python partisan_tweets.py
+
+To run the Flask app:
+
+python app.py
+
+then hit http://localhost:5000 in your favorite browser
