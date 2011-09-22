@@ -19,7 +19,7 @@ def post_partisan_tweets():     # LOL method name
     c.fetch_twitter()
     c.train(chain(*c.training_sets.values()))
     accuracy = c.accuracy(chain(*c.test_sets.values()))
-    salient = c.salient_features()
+    salient = c.salient_features(n=1000)
     
     html = render_template('tweets.html', accuracy=accuracy, salient = salient)
     return jsonify({'result': html})
